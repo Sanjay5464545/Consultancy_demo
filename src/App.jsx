@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { ArrowRight, CheckCircle, Video, FileText, ArrowUpRight, Zap, Star, Menu, X } from 'lucide-react';
 
 // --- RICH COMPONENT 1: INFINITE LOGO MARQUEE ---
+// --- RICH COMPONENT 1: INFINITE LOGO MARQUEE (FIXED FOR MOBILE) ---
 const LogoMarquee = () => {
   const logos = [
     { name: "Google", url: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },
@@ -14,42 +15,52 @@ const LogoMarquee = () => {
   ];
 
   return (
-    <div className="w-full bg-white border-y border-gray-200 py-10 overflow-hidden">
+    <div className="w-full bg-white border-y border-gray-200 py-6 md:py-10 overflow-hidden">
+      {/* Added gap-8 for mobile (smaller) and gap-16 for desktop */}
       <div className="flex w-[200%] animate-scroll hover:pause">
-        <div className="flex w-1/2 justify-around items-center px-10 gap-16">
+        <div className="flex w-1/2 justify-around items-center px-4 md:px-10 gap-8 md:gap-16">
           {logos.map((logo, index) => (
-            <img key={index} src={logo.url} alt={logo.name} className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-60 hover:opacity-100 cursor-pointer" />
+            <img key={index} src={logo.url} alt={logo.name} 
+              // FIXED: 'grayscale-0' on mobile (always visible), 'md:grayscale' on laptop
+              className="h-6 md:h-10 object-contain grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
+            />
           ))}
         </div>
-        <div className="flex w-1/2 justify-around items-center px-10 gap-16">
+        <div className="flex w-1/2 justify-around items-center px-4 md:px-10 gap-8 md:gap-16">
           {logos.map((logo, index) => (
-            <img key={`dup-${index}`} src={logo.url} alt={logo.name} className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-60 hover:opacity-100 cursor-pointer" />
+            <img key={`dup-${index}`} src={logo.url} alt={logo.name} 
+              className="h-6 md:h-10 object-contain grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
+            />
           ))}
         </div>
       </div>
     </div>
   );
 };
-
 // --- RICH COMPONENT 2: SERVICES CARD ---
+// --- RICH COMPONENT 2: SERVICES CARD (FIXED FOR TOUCH) ---
 const ServiceCard = ({ icon: Icon, title, desc }) => (
-  <div className="group relative p-8 md:p-10 border border-gray-200 bg-white hover:bg-black transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer overflow-hidden rounded-xl md:rounded-none">
+  <div className="group relative p-8 md:p-10 border border-gray-200 bg-white 
+    hover:bg-black active:bg-black active:scale-95 transition-all duration-300 
+    hover:-translate-y-2 hover:shadow-2xl cursor-pointer overflow-hidden rounded-xl md:rounded-none">
+    
     <div className="absolute -right-10 -top-10 w-32 h-32 bg-blue-600 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+    
     <div className="relative z-10">
-      <div className="w-16 h-16 bg-blue-50 group-hover:bg-gray-800 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-500">
-        <Icon size={32} className="text-blue-700 group-hover:text-blue-400 transition-colors" />
+      <div className="w-16 h-16 bg-blue-50 group-hover:bg-gray-800 group-active:bg-gray-800 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-500">
+        <Icon size={32} className="text-blue-700 group-hover:text-blue-400 group-active:text-blue-400 transition-colors" />
       </div>
-      <h3 className="text-2xl md:text-3xl font-display font-bold mb-4 text-black group-hover:text-white transition-colors">
+      <h3 className="text-2xl md:text-3xl font-display font-bold mb-4 text-black group-hover:text-white group-active:text-white transition-colors">
         {title}
       </h3>
-      <p className="text-gray-500 group-hover:text-gray-400 leading-relaxed transition-colors">
+      <p className="text-gray-500 group-hover:text-gray-400 group-active:text-gray-400 leading-relaxed transition-colors">
         {desc}
       </p>
     </div>
   </div>
 );
-
 // --- COMPONENT: CARD STACKING (Process) ---
+// --- COMPONENT: CARD STACKING (FIXED FOR TOUCH) ---
 const CardStack = () => {
   return (
     <div className="relative w-full py-20 md:py-32 px-6 bg-neutral-950 text-white">
@@ -61,8 +72,9 @@ const CardStack = () => {
         
         <div className="space-y-12 md:space-y-24">
           
-          {/* Card 01 - Hover Glows Blue */}
-          <div className="sticky top-24 md:top-32 bg-neutral-900 border border-neutral-800 p-6 md:p-12 rounded-3xl shadow-2xl cursor-pointer transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_60px_-15px_rgba(59,130,246,0.3)] group z-10">
+          {/* Card 01 */}
+          <div className="sticky top-24 md:top-32 bg-neutral-900 border border-neutral-800 p-6 md:p-12 rounded-3xl shadow-2xl cursor-pointer 
+            transition-all duration-300 hover:-translate-y-4 active:scale-95 active:bg-neutral-800 group z-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
               <div>
                 <span className="text-6xl md:text-8xl font-display font-bold text-neutral-800 group-hover:text-blue-900 transition-colors duration-500">01</span>
@@ -77,8 +89,9 @@ const CardStack = () => {
             </div>
           </div>
 
-          {/* Card 02 - Hover Glows White */}
-          <div className="sticky top-28 md:top-36 bg-blue-900 border border-blue-700 p-6 md:p-12 rounded-3xl shadow-2xl cursor-pointer transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.2)] group z-20">
+          {/* Card 02 */}
+          <div className="sticky top-28 md:top-36 bg-blue-900 border border-blue-700 p-6 md:p-12 rounded-3xl shadow-2xl cursor-pointer 
+            transition-all duration-300 hover:-translate-y-4 active:scale-95 active:brightness-110 group z-20">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
               <div>
                 <span className="text-6xl md:text-8xl font-display font-bold text-blue-800 group-hover:text-blue-950 transition-colors duration-500">02</span>
@@ -93,8 +106,9 @@ const CardStack = () => {
             </div>
           </div>
 
-          {/* Card 03 - Hover High Contrast */}
-          <div className="sticky top-32 md:top-40 bg-white text-black border border-gray-200 p-6 md:p-12 rounded-3xl shadow-2xl cursor-pointer transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] group z-30">
+          {/* Card 03 */}
+          <div className="sticky top-32 md:top-40 bg-white text-black border border-gray-200 p-6 md:p-12 rounded-3xl shadow-2xl cursor-pointer 
+            transition-all duration-300 hover:-translate-y-4 active:scale-95 active:bg-gray-100 group z-30">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
               <div>
                 <span className="text-6xl md:text-8xl font-display font-bold text-gray-200 group-hover:text-gray-300 transition-colors duration-500">03</span>
@@ -128,7 +142,7 @@ const App = () => {
       <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="text-2xl font-extrabold font-display tracking-tighter z-50 relative">
-            CAREER<span className="text-blue-700">EDGE.</span>
+             SCIFIELD<span className="text-blue-700">TECHNOLOGIES.</span>
           </div>
           
           {/* Desktop Menu */}
@@ -232,12 +246,20 @@ const App = () => {
         </div>
       </section>
 
-      {/* FOOTER */}
+      {/* FOOTER - FIXED SIZE FOR LONG NAME */}
       <footer className="bg-black text-white pt-20 md:pt-32 pb-12 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
-          <div><h2 className="text-[15vw] md:text-[12vw] leading-none font-display font-bold tracking-tighter mb-4 md:mb-8">CAREER<br/>EDGE.</h2></div>
+          <div>
+            {/* I changed text-[12vw] to text-[6vw] here to prevent overflow */}
+            <h2 className="text-[10vw] md:text-[6vw] leading-none font-display font-bold tracking-tighter mb-4 md:mb-8">
+              SCIFIELD<br/>
+              <span className="text-blue-700">TECHNOLOGIES.</span>
+            </h2>
+          </div>
           <div className="flex flex-col items-start md:items-end gap-6 w-full md:w-auto">
-            <button className="bg-white text-black px-12 py-4 font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-colors w-full md:w-auto">Book Consultation</button>
+            <button className="bg-white text-black px-12 py-4 font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-colors w-full md:w-auto">
+              Book Consultation
+            </button>
             <p className="text-gray-500 text-sm uppercase tracking-widest">&copy; 2024. All rights reserved.</p>
           </div>
         </div>
