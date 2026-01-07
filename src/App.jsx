@@ -16,27 +16,28 @@ const LogoMarquee = () => {
   return (
     <div className="w-full bg-white border-y border-gray-200 py-6 md:py-10 overflow-hidden">
       {/* 
-         BUG FIX 3: Changed 'hover:pause' to 'md:hover:pause' 
-         This ensures touching logos on mobile does NOT stop the animation. 
+         BUG FIX (LOGOS): 
+         1. Changed w-[200%] to w-[500%] on mobile. This makes the container HUGE so logos have space.
+         2. Kept 'md:w-[200%]' for desktop.
+         3. Kept 'md:hover:pause' so touching on mobile doesn't stop it.
       */}
-      <div className="flex w-[200%] animate-scroll md:hover:pause">
+      <div className="flex w-[500%] md:w-[200%] animate-scroll md:hover:pause">
         
         {/* Set 1 */}
-        <div className="flex w-1/2 justify-around items-center px-4 md:px-10 gap-8 md:gap-16">
+        <div className="flex w-1/2 justify-around items-center px-2 md:px-10 gap-4 md:gap-16">
           {logos.map((logo, index) => (
             <img key={index} src={logo.url} alt={logo.name} 
-              // BUG FIX 2: Added 'flex-shrink-0' to prevent logos from squashing/overlapping on small screens
-              className="h-6 md:h-10 object-contain flex-shrink-0 grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
+              // Added flex-shrink-0 so they never squash
+              className="h-5 md:h-10 object-contain flex-shrink-0 grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
             />
           ))}
         </div>
 
         {/* Set 2 (Duplicate) */}
-        <div className="flex w-1/2 justify-around items-center px-4 md:px-10 gap-8 md:gap-16">
+        <div className="flex w-1/2 justify-around items-center px-2 md:px-10 gap-4 md:gap-16">
           {logos.map((logo, index) => (
             <img key={`dup-${index}`} src={logo.url} alt={logo.name} 
-              // BUG FIX 2: Added 'flex-shrink-0' here as well
-              className="h-6 md:h-10 object-contain flex-shrink-0 grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
+              className="h-5 md:h-10 object-contain flex-shrink-0 grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
             />
           ))}
         </div>
@@ -150,11 +151,11 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           
           {/* 
-            BUG FIX 1: Changed 'text-2xl' to 'text-lg md:text-2xl' 
-            The name was too long for mobile screens, pushing the menu button out.
-            Made it slightly smaller on mobile, kept big on desktop.
+             BUG FIX (HEADER): 
+             Changed 'text-lg' to 'text-sm' on mobile. 
+             This makes the text small enough to fit next to the button.
           */}
-          <div className="text-lg md:text-2xl font-extrabold font-display tracking-tighter z-50 relative">
+          <div className="text-sm sm:text-base md:text-2xl font-extrabold font-display tracking-tighter z-50 relative">
              SCIFIELD<span className="text-blue-700">TECHNOLOGIES.</span>
           </div>
           
@@ -169,10 +170,10 @@ const App = () => {
           </button>
 
           {/* 
-            BUG FIX 1 (Part 2): Added 'flex-shrink-0' 
-            Ensures the button doesn't get squeezed if text is still long.
+             BUG FIX (HEADER BUTTON):
+             Added 'flex-shrink-0' so the button is never squeezed out by the text.
           */}
-          <button className="md:hidden z-50 relative flex-shrink-0 ml-4" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <button className="md:hidden z-50 relative flex-shrink-0 ml-4 p-1" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
