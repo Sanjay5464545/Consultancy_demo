@@ -3,7 +3,6 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { ArrowRight, CheckCircle, Video, FileText, ArrowUpRight, Zap, Star, Menu, X } from 'lucide-react';
 
 // --- RICH COMPONENT 1: INFINITE LOGO MARQUEE ---
-// --- RICH COMPONENT 1: INFINITE LOGO MARQUEE (FIXED FOR MOBILE) ---
 const LogoMarquee = () => {
   const logos = [
     { name: "Google", url: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },
@@ -16,20 +15,28 @@ const LogoMarquee = () => {
 
   return (
     <div className="w-full bg-white border-y border-gray-200 py-6 md:py-10 overflow-hidden">
-      {/* Added gap-8 for mobile (smaller) and gap-16 for desktop */}
-      <div className="flex w-[200%] animate-scroll hover:pause">
+      {/* 
+         BUG FIX 3: Changed 'hover:pause' to 'md:hover:pause' 
+         This ensures touching logos on mobile does NOT stop the animation. 
+      */}
+      <div className="flex w-[200%] animate-scroll md:hover:pause">
+        
+        {/* Set 1 */}
         <div className="flex w-1/2 justify-around items-center px-4 md:px-10 gap-8 md:gap-16">
           {logos.map((logo, index) => (
             <img key={index} src={logo.url} alt={logo.name} 
-              // FIXED: 'grayscale-0' on mobile (always visible), 'md:grayscale' on laptop
-              className="h-6 md:h-10 object-contain grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
+              // BUG FIX 2: Added 'flex-shrink-0' to prevent logos from squashing/overlapping on small screens
+              className="h-6 md:h-10 object-contain flex-shrink-0 grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
             />
           ))}
         </div>
+
+        {/* Set 2 (Duplicate) */}
         <div className="flex w-1/2 justify-around items-center px-4 md:px-10 gap-8 md:gap-16">
           {logos.map((logo, index) => (
             <img key={`dup-${index}`} src={logo.url} alt={logo.name} 
-              className="h-6 md:h-10 object-contain grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
+              // BUG FIX 2: Added 'flex-shrink-0' here as well
+              className="h-6 md:h-10 object-contain flex-shrink-0 grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-500 opacity-100 cursor-pointer" 
             />
           ))}
         </div>
@@ -37,8 +44,8 @@ const LogoMarquee = () => {
     </div>
   );
 };
+
 // --- RICH COMPONENT 2: SERVICES CARD ---
-// --- RICH COMPONENT 2: SERVICES CARD (FIXED FOR TOUCH) ---
 const ServiceCard = ({ icon: Icon, title, desc }) => (
   <div className="group relative p-8 md:p-10 border border-gray-200 bg-white 
     hover:bg-black active:bg-black active:scale-95 transition-all duration-300 
@@ -59,8 +66,8 @@ const ServiceCard = ({ icon: Icon, title, desc }) => (
     </div>
   </div>
 );
-// --- COMPONENT: CARD STACKING (Process) ---
-// --- COMPONENT: CARD STACKING (FIXED FOR TOUCH) ---
+
+// --- COMPONENT: CARD STACKING ---
 const CardStack = () => {
   return (
     <div className="relative w-full py-20 md:py-32 px-6 bg-neutral-950 text-white">
@@ -141,7 +148,13 @@ const App = () => {
       {/* NAVBAR */}
       <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="text-2xl font-extrabold font-display tracking-tighter z-50 relative">
+          
+          {/* 
+            BUG FIX 1: Changed 'text-2xl' to 'text-lg md:text-2xl' 
+            The name was too long for mobile screens, pushing the menu button out.
+            Made it slightly smaller on mobile, kept big on desktop.
+          */}
+          <div className="text-lg md:text-2xl font-extrabold font-display tracking-tighter z-50 relative">
              SCIFIELD<span className="text-blue-700">TECHNOLOGIES.</span>
           </div>
           
@@ -155,8 +168,11 @@ const App = () => {
             Book Call <ArrowRight size={14} />
           </button>
 
-          {/* Mobile Menu Toggle */}
-          <button className="md:hidden z-50 relative" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          {/* 
+            BUG FIX 1 (Part 2): Added 'flex-shrink-0' 
+            Ensures the button doesn't get squeezed if text is still long.
+          */}
+          <button className="md:hidden z-50 relative flex-shrink-0 ml-4" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
@@ -246,11 +262,10 @@ const App = () => {
         </div>
       </section>
 
-      {/* FOOTER - FIXED SIZE FOR LONG NAME */}
+      {/* FOOTER */}
       <footer className="bg-black text-white pt-20 md:pt-32 pb-12 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
           <div>
-            {/* I changed text-[12vw] to text-[6vw] here to prevent overflow */}
             <h2 className="text-[10vw] md:text-[6vw] leading-none font-display font-bold tracking-tighter mb-4 md:mb-8">
               SCIFIELD<br/>
               <span className="text-blue-700">TECHNOLOGIES.</span>
